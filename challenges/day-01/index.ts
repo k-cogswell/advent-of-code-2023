@@ -25,7 +25,7 @@ function partOne(input:string) {
 	console.log('part one total', sum)
 }
 
-// partOne(input)
+partOne(input)
 
 /**
  * https://adventofcode.com/2023/day/1#part2
@@ -34,7 +34,7 @@ function partOne(input:string) {
  */
 function partTwo(input:string) {
 	let sum: number = 0;
-	const wordDictionary: Record<string, string> = {
+	const numberWordDictionary: Record<string, string> = {
 		'one': '1',
 		'two': '2',
 		'three': '3',
@@ -46,20 +46,20 @@ function partTwo(input:string) {
 		'nine': '9'
 	}
 
-	const matches: string = '1|2|3|4|5|6|7|8|9|one|two|three|four|five|six|seven|eight|nine';
+	const pattern: string = '(?=(one|two|three|four|five|six|seven|eight|nine|\\d))';
 
 	input.split(/\r?\n/).forEach(line => {
-		console.log(line)
-		const match: RegExpMatchArray|null = line.match(new RegExp(`(${matches})`, "g"))
+		let digits: Array<string> = [];
+		const matches: IterableIterator<RegExpMatchArray>|null = line.matchAll(new RegExp(`${pattern}`, "g"))
 
-		if (match) {
-			const len: number = match.length - 1;
-			const first: string = Number.isNaN(parseInt(match[0])) ? wordDictionary[match[0]] : match[0];
-			const last: string = Number.isNaN(parseInt(match[len])) ? wordDictionary[match[len]] : match[len];			
-			console.log(`${first}${last}`)
-			sum += parseInt(`${first}${last}`);
+		for (const match of matches) {
+			digits.push(match[1]);
 		}
-		console.log('------------------')
+
+		const len: number = digits.length - 1;
+		const first: string = Number.isNaN(parseInt(digits[0])) ? numberWordDictionary[digits[0]] : digits[0];
+		const last: string = Number.isNaN(parseInt(digits[len])) ? numberWordDictionary[digits[len]] : digits[len];			
+		sum += parseInt(`${first}${last}`);
 	})
 	
 	console.log('part two total', sum)
