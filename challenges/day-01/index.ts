@@ -12,9 +12,9 @@ function partOne(input:string) {
 
 	input.split(/\r?\n/).forEach(line => {		
 		const match: RegExpMatchArray|null = line.match(/(\d)/g)
-		if (match) {
-			sum += parseInt((match[0] + match[match.length - 1]));
-		}
+    if (!match) return
+
+		sum += parseInt((match[0] + match[match.length - 1]));
 	})
 	
 	console.log('part one total', sum)
@@ -52,7 +52,8 @@ function partTwo(input:string) {
 
 		const len: number = digits.length - 1;
 		const first: string = Number.isNaN(parseInt(digits[0])) ? numberTranslationDictionary[digits[0]] : digits[0];
-		const last: string = Number.isNaN(parseInt(digits[len])) ? numberTranslationDictionary[digits[len]] : digits[len];			
+		const last: string = Number.isNaN(parseInt(digits[len])) ? numberTranslationDictionary[digits[len]] : digits[len];		
+			
 		sum += parseInt(`${first}${last}`);
 	})
 	
