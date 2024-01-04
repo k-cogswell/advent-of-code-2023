@@ -1,7 +1,6 @@
-import { readFileSync } from 'fs'
-import path from 'path'
+import getInput from "../../utils/getInput";
 
-const input = readFileSync(path.resolve(__dirname, './input.txt')).toString();
+const input = getInput(__dirname);
 
 /**
  * https://adventofcode.com/2023/day/1#part1
