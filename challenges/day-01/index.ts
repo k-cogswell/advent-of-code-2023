@@ -2,11 +2,7 @@ import { readFileSync } from 'fs'
 import path from 'path'
 
 const input = readFileSync(path.resolve(__dirname, './input.txt')).toString();
-// const input = `
-// 1abc2
-// pqr3stu8vwx
-// a1b2c3d4e5f
-// treb7uchet`
+
 /**
  * https://adventofcode.com/2023/day/1#part1
  * 
@@ -34,7 +30,8 @@ partOne(input)
  */
 function partTwo(input:string) {
 	let sum: number = 0;
-	const numberWordDictionary: Record<string, string> = {
+	const pattern: string = '(?=(one|two|three|four|five|six|seven|eight|nine|\\d))';
+	const numberTranslationDictionary: Record<string, string> = {
 		'one': '1',
 		'two': '2',
 		'three': '3',
@@ -46,8 +43,6 @@ function partTwo(input:string) {
 		'nine': '9'
 	}
 
-	const pattern: string = '(?=(one|two|three|four|five|six|seven|eight|nine|\\d))';
-
 	input.split(/\r?\n/).forEach(line => {
 		let digits: Array<string> = [];
 		const matches: IterableIterator<RegExpMatchArray>|null = line.matchAll(new RegExp(`${pattern}`, "g"))
@@ -57,8 +52,8 @@ function partTwo(input:string) {
 		}
 
 		const len: number = digits.length - 1;
-		const first: string = Number.isNaN(parseInt(digits[0])) ? numberWordDictionary[digits[0]] : digits[0];
-		const last: string = Number.isNaN(parseInt(digits[len])) ? numberWordDictionary[digits[len]] : digits[len];			
+		const first: string = Number.isNaN(parseInt(digits[0])) ? numberTranslationDictionary[digits[0]] : digits[0];
+		const last: string = Number.isNaN(parseInt(digits[len])) ? numberTranslationDictionary[digits[len]] : digits[len];			
 		sum += parseInt(`${first}${last}`);
 	})
 	
