@@ -17,20 +17,23 @@ function partOne(input:string) {
 	input.split(/\r?\n/).forEach(line => {		
 		let gameIsValid: boolean = true;
 		const matches: IterableIterator<RegExpMatchArray>|null = line.matchAll(/\d+(?= (red|green|blue))/g)
+
+		if (!matches) return
 		
 		for (const match of matches) { 
-			if (parseInt(match[0]) > colorLimits[match[1]]) {
-				gameIsValid = false
-				break
-			}
+			if (parseInt(match[0]) <= colorLimits[match[1]]) continue
+
+			gameIsValid = false
+			break
 		}
 
-		if (gameIsValid) {
-			let gameID: RegExpMatchArray | null = line.match(/\d+(?=:)/g)
-			if (!gameID) return
-			
-			sum += parseInt(gameID[0])
-		}
+		if (!gameIsValid) return 
+
+		const gameID: RegExpMatchArray | null = line.match(/\d+(?=:)/g)
+
+		if (!gameID) return
+		
+		sum += parseInt(gameID[0])
 	})
 	
 	console.log('part one total', sum)
