@@ -73,6 +73,7 @@ function findAdjacentSymbols(lines: Array<string>, match: RegExpMatchArray, curr
 
       if (!indicesToCheck.includes(symbol.index)) continue
 
+      matchFound = true
       partNumber = parseInt(match[0])	
       break
     }
@@ -81,14 +82,50 @@ function findAdjacentSymbols(lines: Array<string>, match: RegExpMatchArray, curr
   return partNumber
 }
 
-partOne(input)
+// partOne(input)
 
-// /**
-//  * https://adventofcode.com/2023/day/2#part2
-//  * 
-//  * @param input data from challenge
-//  */
-// function partTwo(input: string) {
-// }
+/**
+ * https://adventofcode.com/2023/day/3#part2
+ * 
+ * @param input data from challenge
+ */
+function partTwo(input: string) {
+  // const map = input.split('\n').map(line => line.split(''));
+  let sum: number = 0
+  const lines: Array<string> = input.split('\n')
 
-// partTwo(input)
+  lines.forEach((line, index) => {
+    const match: RegExpMatchArray[] = Array.from(line.matchAll(/\*/g))
+
+    match.some(m => {
+      if (m.index == undefined) return true
+      sum += findAdjacentPartNumbers(lines, m.index, index)
+    })
+  })
+
+  console.log('Part Two Answer:', sum)
+}
+
+function findAdjacentPartNumbers(lines: Array<string>, start: number, currentLine: number) : number {
+  const numbers: Array<number> = []
+  for (let i = currentLine - 1; i <= currentLine + 1; i++) {
+    const matches = Array.from(lines[i].matchAll(/[\d]+/g));
+
+    matches.forEach(m => {
+      if (m.index == undefined) return
+
+      const matchStart = m.index
+      const matchEnd = m.index + m[0].length - 1
+
+      if (matchEnd >= start - 1 && matchStart <= start + 1) {
+        numbers.push(parseInt(m[0]))
+      }
+    })
+  }
+
+  if (numbers.length !== 2) return 0
+  
+  return numbers[0] * numbers[1]
+}
+
+partTwo(input)
