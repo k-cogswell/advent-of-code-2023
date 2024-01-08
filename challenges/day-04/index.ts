@@ -8,7 +8,7 @@ const input = getInput(__dirname);
 // Card 6: 31 18 13 56 72 | 74 77 10 23 35 67 36 11`
 
 /**
- * https://adventofcode.com/2023/day/3#part1
+ * https://adventofcode.com/2023/day/4#part1
  * 
  * @param input data from challenge
  */
@@ -18,9 +18,9 @@ function partOne(input: string) {
   const winners = input
     .split('\n')
     .map(line => {
-      let [left, right] = line
+      const [left, right] = line
         .split("|")
-        .map((group, i) => group.match(/(\d+)/g))
+        .map(group => group.match(/(\d+)/g))
         
       const numberOfWinners = left?.slice(1).filter(num => right?.includes(num)).length || 0
       return numberOfWinners > 0 ? Math.pow(2, numberOfWinners - 1) : 0
@@ -31,7 +31,7 @@ function partOne(input: string) {
   console.log('Part one total', sum)
 }
 
-partOne(input)
+// partOne(input)
 
 /**
  * https://adventofcode.com/2023/day/3#part2
@@ -39,6 +39,24 @@ partOne(input)
  * @param input data from challenge
  */
 function partTwo(input: string) {
+  const knownWinners: Record<string, number|undefined> = {}
+  const lines = input.split('\n')
+
+  for (let i = 0; i < lines.length; i++) {
+    const [left, right] = lines[i]
+      .split("|")
+      .map(group => group.match(/(\d+)/g))
+
+    if (!left || !right) continue
+
+    const length = left?.slice(1).filter(num => right?.includes(num)).length
+
+    if (length <= 0)  continue
+    
+    knownWinners[left[0]] = length
+  }
+
+  console.log('knownWinners', knownWinners)
 }
 
 partTwo(input)
